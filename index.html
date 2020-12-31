@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CS194 Final Projects</title>
+	<link rel="stylesheet" type="text/css" href="website.css">
+	<link href='http://fonts.googleapis.com/css?family=Arial' rel='stylesheet'>
+</head>
+<body>
+
+<div align='middle'>
+	<h1 > CS194 Final Projects</h1>
+	<h2>Neural Style Transfer & Light Field Camera</h2>
+	<p class="author">Lucy Wang</p>
+	<br>
+	<img src="artistic_style_transfer/sather_gate_transfer^9.jpg" align="middle" width="400px" />
+
+	<div>
+	<br>
+	<br>
+		<h2 align='middle'>Project1: Neural Style Transfer</h2>
+	</div>
+	<div>
+		<p class="small_words" align='left'>In this project, I chose to re-implement Gatys et. al.'s paper: <a href="https://arxiv.org/pdf/1508.06576.pdf">A Neural Algorithm of Artistic Style</a>, which uses feature maps in CNN to change the style of the picture, but retain the contents. It is known that convolution layers of a CNN object detection model can be used to learn meaningful features of the image. We can directly visualize these information about the image by reconstructing the image only from the feature maps in that layer, which creates amazing results.  I had a lot of fun doing this project. </p>
+
+		<br>
+		<h3 align='left'> Neural Network Architecture</h3>
+
+		<p align='left'>According to the paper, I used a pretrained VGG-19 model, which has 16 convolution layers and 5 max-pooling layers. I first removed all the fully connected layer. Then, after each of the style layers (conv1_1, conv2_1, conv3_1, conv4_1, conv5_1) and content layers (conv4_2), I added a layer indicating its style loss and content loss. The full architecture of the modified network is shown below: </p>
+
+		<img src="artistic_style_transfer/network.jpg" align="middle" width="700px" />
+	
+
+	</div>
+
+	<br>
+	<div align="middle">
+		<h3 align="left"> Performing the Style Transfer</h3>
+		<p align='left'>I also defined the loss function for the network as a weighted sum of content loss and style loss according to the paper. The content loss is the min square error of activation values between the original image and generated image. The style loss is determined by the gram matrices of the corresponding convolution layers. During training, the two weights (content_weight and style_weight) of the loss function are used as hyperparameters to tune the model. Most pictures are produced with a content to style weight ratio of 1/1000000. I then used LBFGS optimizer and trained with num_step =1000.  </p>
+	</div>
+
+	<br>
+
+	<div align='middle'>
+		<h3 align='left'> Re-implementing Neckarfront Results</h3>
+
+		<div align='middle'>
+			<table style="width=60%">
+				<tr>
+					<td>
+						<img id="compact"src="artistic_style_transfer/neckarfront.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Neckarfront</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/starry_night.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Starry Night</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/starry_night_transfer_10^6.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Transfered Neckarfront</figcaption>
+					</td>					
+				</tr>
+
+				<tr>
+					<td>
+						<img id="compact"src="artistic_style_transfer/neckarfront.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Neckarfront</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/the_scream.jpg" align="middle" width="350px" />
+						<figcaption align="middle">The Scream</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/the_scream_transfer_10^9.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Transfered Neckarfront</figcaption>
+					</td>					
+				</tr>
+
+				<tr>
+					<td>
+						<img id="compact"src="artistic_style_transfer/neckarfront.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Neckarfront</figcaption>
+					</td>
+					<td>
+						<img src="artistic_style_transfer/picasso.jpg" align="middle" width="250px" />
+						<figcaption align="middle">Picasso</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/picasso_transfer_10^7.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Transfered Neckarfront</figcaption>
+					</td>					
+				</tr>
+			</table>
+		</div>
+	</div>
+	<br>
+
+
+	<div align='middle'>
+		<h3 align='left'> Other Images</h3>
+
+		<div align='middle'>
+			<table style="width=60%">
+				<tr>
+					<td>
+						<img id="compact"src="artistic_style_transfer/vassel.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Vessel</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/matisse2.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Matisse</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/vessel_transfer_10^9.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Transfered Vessel</figcaption>
+					</td>					
+				</tr>
+
+				<tr>
+					<td>
+						<img id="compact"src="artistic_style_transfer/disney.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Walt Disney Concert Hall</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/disney_style2.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Disney</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/disney_transfer_10^6.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Transfered Disney Conter Hall</figcaption>
+					</td>					
+				</tr>
+
+				<tr>
+					<td>
+						<img id="compact"src="artistic_style_transfer/sather_gate.jpg" align="middle" width="350px" />
+						<figcaption align="middle">Sather Gate</figcaption>
+					</td>
+					<td>
+						<img src="artistic_style_transfer/green1.jpg" align="middle" width="250px" />
+						<figcaption align="middle">Ink Wash Painting</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/sather_gate_transfer^9.jpg" align="middle" width="350px" />
+						<figcaption align="middle"> Transfered Sather Gate</figcaption>
+					</td>					
+				</tr>
+			</table>
+		</div>
+	</div>
+	<br>
+	<div align='middle'>
+		<h3 align='left'> Failure Case</h3>
+		<p align='left'> Here is an image that failed to capture the main style correctly. Since the content image only contains a few colors and have a simple structure, it's hard to capture the style image's true features, therefore creating defected results. </p>
+		<div align='middle'>
+			<table style="width=60%">
+				<tr>
+					<td>
+						<img id="compact"src="artistic_style_transfer/cat2.jpg" align="middle" width="350px" />
+						<figcaption align="middle">My Cat</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/lianyang.jpg" align="middle" width="250px" />
+						<figcaption align="middle">Dragon</figcaption>
+					</td>
+					<td>
+						<img id="compact"src="artistic_style_transfer/failed_cat.png" align="middle" width="350px" />
+						<figcaption align="middle">Transfered Cat</figcaption>
+					</td>					
+				</tr>
+			</table>
+		</div>
+	</div>
+	<br>
+
+	<div align='middle'>
+		<h3 align='left'> Conclusion</h3>
+		<p align='left'>This is my favorite project in this course! It's a great opportunity to actually perceive how feature maps are useful in interpreting informations in the image. I am constantly amazed by how much machine learning could achieve through such simple implementations. If time allows, I'd love to continue exploring how different layers could generate different results. </p>
+	</div>
+	<br>
+	<br>
+	<br>
+
+	<div>
+	<h2 align='middle'>Project2: Light Field Camera</h2>
+	<img src="light_field_camera/chess/chess_refocusing.gif" align="middle" width="400px" />
+	<br>
+	    <p align='left'> In this project, we created the effect of light field cameras through simple techniques of depth refocusing and aperture adjustment. The technique is based on <a href="http://graphics.stanford.edu/papers/lfcamera/lfcamera-150dpi.pdf">  Light Field Photography with a Hand-held Plenoptic Camera</a> by Ng et al.. In this project, we can mimic the pictures taken by a light field camera with varying focus length and aperture size using pictures taken by normal cameras from different positions on a plane orthogonal to the optical axis. The <a href="http://lightfield.stanford.edu/lfs.html">  Stanford Light Field Archive</a> dataset has pictures taken from a 17*17 camera array. Each picture is taken at a different location. </p>
+
+	</div>
+	<br>
+
+	<div align='middle'>
+	<h3 align='left'> Depth Refocusing</h3>
+		<p align='left'>It can be perceived that the objects which are far away from the camera do not vary their position significantly when the camera moves around while keeping the optical axis direction unchanged. The nearby objects, on the other hand, vary their position significantly across images. Therefore, shifting each image can make sure that images match each other on some fixed depth, therefore creating a focal point. </p>
+
+		<p align='left'>Since the camera grid is 17*17, the center image is (8, 8). I shifted each image by alpha* (i - 8, j - 8), where alpha is a varying parameter that allows the image to focus at different depths. Different images will have different alpha ranges. Here are some examples I generated:</p>
+		
+
+		<div align='middle'>
+			<table style="width=100%">
+				<tr>
+					<td>
+						<img src="light_field_camera/candy/out_08_08_-776.880371_533.057190.png" align="middle" width="350px" />
+						<figcaption align="middle">Candy</figcaption>
+					</td>
+					<td>
+						<img src="light_field_camera/candy/candy_refocusing.gif" align="middle" width="350px" />
+						<figcaption align="middle">alpha: [-5, -4, -3, -2, -1, 0]</figcaption>
+					</td>					
+				</tr>
+				<tr>
+					<td>
+						<img src="light_field_camera/chess/out_08_08_-818.578247_-3313.998047_.png" align="middle" width="350px" />
+						<figcaption align="middle">Chess</figcaption>
+					</td>
+					<td>
+						<img src="light_field_camera/chess/chess_refocusing.gif" align="middle" width="350px" />
+						<figcaption align="middle">alpha: [-1, 0, 1, 2, 3]</figcaption>
+					</td>					
+				</tr>
+				<tr>
+					<td>
+						<img src="light_field_camera/chest/out_08_08_-129.600601_1510.120728_.png" align="middle" width="350px" />
+						<figcaption align="middle">Treasure Chest</figcaption>
+					</td>
+					<td>
+						<img src="light_field_camera/chest/chest_refocusing.gif" align="middle" width="350px" />
+						<figcaption align="middle">alpha: [-3, -2, -1, 0,  1, 2, 3, 4]</figcaption>
+					</td>					
+				</tr>
+			</table>
+		</div>
+
+	</div>
+
+
+	<br>
+
+	<div align='middle'>
+	<h3 align='left'> Aperture Adjustment </h3>
+		<p align='left'>We can also simulate the varying aperture sizes of a light field camera through aperture adjustment. Averating with many images will create a large aperture, while averaving with only a few images will create a small aperture. This is due to the fact that larger apertures can capture more lights, which corresponds to capturing more image positions.</p>
+
+		<p align='left'>Similar to depth refocusing, I created a hyperparameter beta to indicate the varying radius of our camera grid. We perform the same shifting and averaging technique as in depth refocusing, but only use images that satisfy |i - 8| <= beta and |j - 8| <= beta. Here are some examples I generated:</p>
+		
+
+		<div align='middle'>
+			<table style="width=100%">
+				<tr>
+					<td>
+						<img src="light_field_camera/candy/out_08_08_-776.880371_533.057190.png" align="middle" width="350px" />
+						<figcaption align="middle">Candy</figcaption>
+					</td>
+					<td>
+						<img src="light_field_camera/candy/candy_aperture.gif" align="middle" width="350px" />
+						<figcaption align="middle">beta: [0, 1, 2, 3, 4]</figcaption>
+					</td>					
+				</tr>
+				<tr>
+					<td>
+						<img src="light_field_camera/chess/out_08_08_-818.578247_-3313.998047_.png" align="middle" width="350px" />
+						<figcaption align="middle">Chess</figcaption>
+					</td>
+					<td>
+						<img src="light_field_camera/chess/chess_aperture.gif" align="middle" width="350px" />
+						<figcaption align="middle">beta: [0, 1, 2, 3, 4, 5, 6, 7]</figcaption>
+					</td>					
+				</tr>
+				<tr>
+					<td>
+						<img src="light_field_camera/chest/out_08_08_-129.600601_1510.120728_.png" align="middle" width="350px" />
+						<figcaption align="middle">Treasure Chest</figcaption>
+					</td>
+					<td>
+						<img src="light_field_camera/chest/chest_aperture.gif" align="middle" width="350px" />
+						<figcaption align="middle">beta: [0, 1, 2, 3, 4, 5, 6, 7]</figcaption>
+					</td>					
+				</tr>
+			</table>
+		</div>
+
+	</div>
+
+	<br>
+
+	<div align='middle'>
+	<h3 align='left'> Bells & Whistles</h3>
+		<p align='left'>I chose to take my own pictures to simulate a light field camera. I took pictures on a 5*5 grid, and generated depth refocusing and aperture adjustment images just like above. However, due to technical limitations, my hand-shot pictures cannot create the exact grid positions and angles necessary for the effect to be successful. The resulting images came out very blury. Another reason for my failure is due to the limited number of pictures I took. Since a 5*5 grid is a lot smaller than a 17*17 one, it is reasonable that the results will be less satisfying as well. </p>	
+
+		<div align='middle'>
+			<table style="width=100%">
+				<tr>
+					<td>
+						<img src="light_field_camera/bellswhistles/0-0.jpg" align="middle" width="200px" />
+					</td>
+					<td>
+						<img src="light_field_camera/bellswhistles/0-2.jpg" align="middle" width="200px" />
+					</td>
+					<td>
+						<img src="light_field_camera/bellswhistles/0-4.jpg" align="middle" width="200px" />
+					</td>					
+				</tr>
+			</table>
+		</div>	
+
+		<div align='middle'>
+			<table style="width=100%">
+				<tr>
+					<td>
+						<img src="light_field_camera/bellswhistles/bells_refocusing.gif" align="middle" width="300px" />
+						<figcaption align="middle">Depth Refocusing</figcaption>
+					</td>
+					<td>
+						<img src="light_field_camera/bellswhistles/bells_aperture.gif" align="middle" width="300px" />
+						<figcaption align="middle">Aperture Adjustment</figcaption>
+					</td>					
+				</tr>
+			</table>
+		</div>
+		
+
+	</div>
+	<br>
+
+	<div align='middle'>
+	<h3 align='left'> Conclusion</h3>
+		<p align='left'>This is a very fun project to work on. We can create amazing effects through very simple techniques. I've also learned more about how different aspects of a camera contributes to the overall effects of an image. It's also very cool that we could produce our own light field images throgh simply taking pictures on our own.</p>
+		
+	</div>
+
+</div>
